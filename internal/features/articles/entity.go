@@ -12,6 +12,10 @@ type Handler interface {
 }
 
 type Services interface {
+	CreateArticles(newArticles Article) error
+	GetArticles() ([]Article, error)
+	UpdateArticles(id uint, updateArticles Article) error
+	DeleteArticles(id uint) error
 }
 
 type Query interface {
