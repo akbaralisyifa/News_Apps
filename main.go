@@ -1,8 +1,10 @@
 package main
 
 import (
-	"fmt"
+	"log"
 	"newsapps/configs"
+	articleRepository "newsapps/internal/features/articles/repository"
+	commentRepository "newsapps/internal/features/comments/repository"
 	"newsapps/internal/features/users"
 	userHandler "newsapps/internal/features/users/handler"
 	userRepository "newsapps/internal/features/users/repository"
@@ -30,12 +32,16 @@ func main() {
 	setup := configs.ImportSetting()
 	connection, err := configs.ConnectDB(setup)
 	if err != nil {
-		fmt.Println("Stop program, masalah pada database", err.Error())
+		log.Fatal("Stop program, masalah database", err.Error())
 		return
 	}
 
-	connection.AutoMigrate(&userRepository.User{})
+	err = connection.AutoMigrate(&userRepository.User{}, &articleRepository.Article{}, &commentRepository.Comment{})
 
+	if err != nil {
+		log.Fatal("Stop program, masalah database ", err.Error())
+		return
+	}
 	e := echo.New()
 
 	e.Pre(middleware.RemoveTrailingSlash())
@@ -46,5 +52,4 @@ func main() {
 
 	routes.InitRoute(e, ur)
 	e.Logger.Fatal(e.Start(":8000"))
-	fmt.Println("testing BERHASIL!", connection)
 }

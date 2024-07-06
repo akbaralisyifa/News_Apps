@@ -3,6 +3,9 @@ package repository
 import (
 	"newsapps/internal/features/users"
 
+	articleRepository "newsapps/internal/features/articles/repository"
+	"newsapps/internal/features/comments/repository"
+
 	"gorm.io/gorm"
 )
 
@@ -12,7 +15,8 @@ type User struct {
 	Name     string
 	Password string
 	Email    string
-	// Todos     []Todo    `gorm:"foreignKey:Owner"`
+	Article  []articleRepository.Article `gorm:"foreignKey:User_id"`
+	Comment  []repository.Comment        `gorm:"foreignKey:User_id"`
 }
 
 func (u *User) toUserEntity() users.Users {

@@ -2,6 +2,7 @@ package configs
 
 import (
 	"fmt"
+	"log"
 	"os"
 
 	"github.com/joho/godotenv"
@@ -44,6 +45,7 @@ func ConnectDB(s setting) (*gorm.DB, error) {
 	})
 
 	if err != nil {
+		log.Fatal("Error config database ", err.Error())
 		return nil, err
 	}
 
