@@ -29,6 +29,20 @@ func (am *ArticleModel) GetArticles() ([]articles.Article, error){
 	return result, nil
 }
 
+// Get Article by ID
+func (am *ArticleModel) GetArticlesByID(id uint)(articles.Article, error){
+	var result Articles;
+
+	err := am.db.First(&result, id).Error;
+
+	if err != nil {
+		return articles.Article{}, err
+	}
+
+	return result.ToArticlesEntity(), nil
+}
+
+// Create Articles
 func (am *ArticleModel) CreateArticles(newArticles articles.Article) error {
 	resultData := ToArticlesQuery(newArticles)
 	err := am.db.Create(&resultData).Error;
@@ -40,6 +54,7 @@ func (am *ArticleModel) CreateArticles(newArticles articles.Article) error {
 	return nil;
 }
 
+// Update Aritcles
 func (am *ArticleModel) UpdateArticles(id uint, updateArticles articles.Article) error {
 	qry := am.db.Model(articles.Article{}).Where("id = ?", id).Updates(updateArticles)
 
@@ -50,6 +65,7 @@ func (am *ArticleModel) UpdateArticles(id uint, updateArticles articles.Article)
 	return nil;
 }
 
+// Delete Articles
 func (am *ArticleModel) DeleteArticles(id uint) error {
 	qry := am.db.Where("id = ?", id).Delete(Articles{});
 

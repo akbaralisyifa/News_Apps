@@ -15,8 +15,8 @@ type User struct {
 	Name     string
 	Password string
 	Email    string
-	Article  []articleRepository.Article `gorm:"foreignKey:User_id"`
-	Comment  []repository.Comment        `gorm:"foreignKey:User_id"`
+	Article  []articleRepository.Articles `gorm:"foreignKey:User_id"`
+	Comment  []repository.Comments        `gorm:"foreignKey:User_id"`
 }
 
 func (u *User) toUserEntity() users.Users {

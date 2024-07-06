@@ -1,5 +1,7 @@
 package articles
 
+import "github.com/labstack/echo/v4"
+
 type Article struct {
 	ID      uint
 	UserID  uint
@@ -9,6 +11,10 @@ type Article struct {
 }
 
 type Handler interface {
+	CreateArticles() echo.HandlerFunc
+	GetArticles() echo.HandlerFunc
+	UpdateArticles() echo.HandlerFunc
+	DeleteArticles() echo.HandlerFunc
 }
 
 type Services interface {
@@ -16,6 +22,7 @@ type Services interface {
 	GetArticles() ([]Article, error)
 	UpdateArticles(id uint, updateArticles Article) error
 	DeleteArticles(id uint) error
+	GetArticlesByID(id uint)(Article, error)
 }
 
 type Query interface {
@@ -23,4 +30,5 @@ type Query interface {
 	CreateArticles(newArticles Article) error
 	UpdateArticles(id uint, updateArticles Article) error
 	DeleteArticles(id uint) error
+	GetArticlesByID(id uint)(Article, error)
 }

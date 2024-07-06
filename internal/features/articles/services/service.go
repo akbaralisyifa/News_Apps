@@ -38,6 +38,18 @@ func(as *ArticlesServices) GetArticles()( []articles.Article, error){
 	return result, nil;
 }
 
+func(as *ArticlesServices) GetArticlesByID(id uint)(articles.Article, error){
+	result, err := as.qry.GetArticlesByID(id);
+
+	if err != nil {
+		log.Print("Get Article By ID Sql Error", err.Error())
+		return articles.Article{}, errors.New("an error occurred on the server while processing data")
+	}
+
+	return result, nil;
+
+}
+
 func(as *ArticlesServices) UpdateArticles(id uint, updateArticles articles.Article) error {
 
 	err := as.qry.UpdateArticles(id, updateArticles);

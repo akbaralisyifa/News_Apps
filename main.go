@@ -3,7 +3,11 @@ package main
 import (
 	"log"
 	"newsapps/configs"
+	"newsapps/internal/features/articles"
+	"newsapps/internal/features/articles/handler"
+	"newsapps/internal/features/articles/repository"
 	articleRepository "newsapps/internal/features/articles/repository"
+	"newsapps/internal/features/articles/services"
 	commentRepository "newsapps/internal/features/comments/repository"
 	"newsapps/internal/features/users"
 	userHandler "newsapps/internal/features/users/handler"
@@ -28,6 +32,14 @@ func InitUserRoute(db *gorm.DB) users.Handler {
 	return uc
 }
 
+func InitialArticleRouter(db *gorm.DB) articles.Handler{
+	am := repository.NewArticleModel(db);
+	as := services.NewArticlesServices(am);
+	ac := handler.NewArticlesController(as);
+
+	return ac;
+}
+
 func main() {
 	setup := configs.ImportSetting()
 	connection, err := configs.ConnectDB(setup)
@@ -49,7 +61,8 @@ func main() {
 	e.Use(middleware.CORS()) // ini aja cukup
 
 	ur := InitUserRoute(connection)
+	ac := InitialArticleRouter(connection)
 
-	routes.InitRoute(e, ur)
+	routes.InitRoute(e, ur, ac)
 	e.Logger.Fatal(e.Start(":8000"))
 }
