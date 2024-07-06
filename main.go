@@ -36,7 +36,7 @@ func main() {
 		return
 	}
 
-	err = connection.AutoMigrate(&userRepository.User{}, &articleRepository.Article{}, &commentRepository.Comment{})
+	err = connection.AutoMigrate(&userRepository.User{}, &articleRepository.Articles{}, &commentRepository.Comments{})
 
 	if err != nil {
 		log.Fatal("Stop program, masalah database ", err.Error())
