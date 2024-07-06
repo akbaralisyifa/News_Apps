@@ -2,10 +2,9 @@ package repository
 
 import "gorm.io/gorm"
 
-type Comment struct {
+type Comments struct {
 	gorm.Model
-	ID         uint
-	Article_id uint
-	User_id    uint
-	Comment    string
+	UserID 		uint	`json:"user_id"`
+	ArticleID 	uint	`json:"article_id"`
+	Comment		string	`json:"comment"`
 }
