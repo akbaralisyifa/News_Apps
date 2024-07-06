@@ -9,7 +9,6 @@ type Users struct {
 	Name     string
 	Password string
 	Email    string
-	Phone    string
 }
 
 type Handler interface {
