@@ -25,7 +25,6 @@ func (j *jwtUtility) GenerateJWT(id uint, email string) (string, error) {
 	var data = jwt.MapClaims{}
 	// custom data
 	data["id"] = id
-	data["email"] = email
 	// mandatory data
 	data["iat"] = time.Now().Unix()
 	data["exp"] = time.Now().Add(time.Hour * 3).Unix()
