@@ -31,7 +31,7 @@ type LoginValidate struct {
 	Password string `validate:"required,min=8,alphanum"`
 }
 type RegisterValidate struct {
+	Name     string `validate:"required,min=5,alphanum"`
 	Email    string `validate:"required,email"`
 	Password string `validate:"required,min=7,alphanum"`
-	Name     string `validate:"required,min=5,alphanum"`
 }

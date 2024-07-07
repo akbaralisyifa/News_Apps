@@ -11,12 +11,11 @@ import (
 
 type User struct {
 	gorm.Model
-	ID       uint
 	Name     string
 	Password string
 	Email    string
-	Article  []articleRepository.Articles `gorm:"foreignKey:User_id"`
-	Comment  []repository.Comments        `gorm:"foreignKey:User_id"`
+	Article  []articleRepository.Articles `gorm:"foreignKey:UserID"`
+	Comment  []repository.Comments        `gorm:"foreignKey:UserID"`
 }
 
 func (u *User) toUserEntity() users.Users {

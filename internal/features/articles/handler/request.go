@@ -3,7 +3,7 @@ package handler
 import "newsapps/internal/features/articles"
 
 type ArticlesRequeste struct {
-	UserID 	uint	`json:"user_id"`
+	UserID  uint   `json:"user_id"`
 	Title   string `json:"title"`
 	Content string `json:"content"`
 	Image   string `json:"image"`
@@ -11,9 +11,9 @@ type ArticlesRequeste struct {
 
 func ToRequeteArticles(ar ArticlesRequeste) articles.Article {
 	return articles.Article{
-		UserID: ar.UserID,
-		Title: ar.Title,
+		UserID:  ar.UserID,
+		Title:   ar.Title,
 		Content: ar.Content,
-		Image: ar.Image,
+		Image:   ar.Image,
 	}
 }
