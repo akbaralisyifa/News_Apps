@@ -77,8 +77,8 @@ func(as *ArticlesServices) UpdateArticles(id uint, updateArticles articles.Artic
 	return nil;
 }
 
-func(as *ArticlesServices) DeleteArticles(id uint) error {
-	err := as.qry.DeleteArticles(id);
+func(as *ArticlesServices) DeleteArticles(id uint, userID uint) error{
+	err := as.qry.DeleteArticles(id, userID);
 
 	if err != nil {
 		log.Print("Delete Articles Sql Error", err.Error())

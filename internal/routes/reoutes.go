@@ -30,4 +30,5 @@ func InitRoute(c *echo.Echo, ur users.Handler, ac articles.Handler) {
 	a.POST("", ac.CreateArticles())
 	a.PUT("/:id", ac.UpdateArticles())
 	a.DELETE("/:id", ac.DeleteArticles())
+	a.GET("/:id", ac.GetArticlesByID())
 }

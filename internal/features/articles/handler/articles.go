@@ -58,10 +58,27 @@ func(ac *ArticlesController) GetArticles() echo.HandlerFunc{
 		result, err := ac.srv.GetArticles();
 
 		if err != nil {
+			if err == gorm.ErrRecordNotFound {
+				return c.JSON(404, helper.ResponseFormat(404, "article not found", nil))
+			}
 			return c.JSON(500, helper.ResponseFormat(500, "server error", nil))
 		}
 
-		return	c.JSON(200, helper.ResponseFormat(200, "success get data", result))
+		return	c.JSON(200, helper.ResponseFormat(200, "success get data", ToArticlesResponse(result)))
+	}
+}
+
+// get articles by id
+func(ac *ArticlesController) GetArticlesByID() echo.HandlerFunc{
+	return func (c echo.Context) error {
+		id, _ := strconv.Atoi(c.Param("id"))
+		result, err := ac.srv.GetArticlesByID(uint(id));
+
+		if err != nil{
+			return c.JSON(500, helper.ResponseFormat(500, "server error", nil))
+		}
+
+		return c.JSON(200, helper.ResponseFormat(200, "success get data", ToArticlesResponseById(result)))
 	}
 }
 
@@ -70,6 +87,8 @@ func(ac *ArticlesController) UpdateArticles() echo.HandlerFunc{
 	return func(c echo.Context) error {
 
 		id, _ := strconv.Atoi(c.Param("id"))
+
+		article, _ := ac.srv.GetArticlesByID(uint(id))
 
 		var input ArticlesRequeste
 		err := c.Bind(&input);
@@ -81,11 +100,13 @@ func(ac *ArticlesController) UpdateArticles() echo.HandlerFunc{
 
 		var userID = utils.NewJwtUtility().DecodeToken(c.Get("user").(*jwt.Token));
 
+		input.UserID = uint(userID);
+
 		if input.UserID != uint(userID){
 			return c.JSON(401, helper.ResponseFormat(400, "Unauthorized", nil))
 		}
 
-		err = ac.srv.UpdateArticles(uint(id), ToRequeteArticles(input))
+		err = ac.srv.UpdateArticles(article.ID, ToRequeteArticles(input))
 
 		if err != nil{
 			return c.JSON(500, helper.ResponseFormat(500, "server error", nil))
@@ -100,30 +121,29 @@ func(ac *ArticlesController) DeleteArticles() echo.HandlerFunc {
 	return func(c echo.Context) error {
 
 		id, _ := strconv.Atoi(c.Param("id"))
-
 		var userID = utils.NewJwtUtility().DecodeToken(c.Get("user").(*jwt.Token));
 
-		// get article by Id
-		article, err := ac.srv.GetArticlesByID(uint(id));
+		// // get article by Id
+		// article, err := ac.srv.GetArticlesByID(uint(id));
 
-		if err != nil {
-			if err == gorm.ErrRecordNotFound {
-				return c.JSON(404, helper.ResponseFormat(404, "article not found", nil))
-			}
-			return c.JSON(500, helper.ResponseFormat(500, "server error", nil))
-		}
+		// if err != nil {
+		// 	if err == gorm.ErrRecordNotFound {
+		// 		return c.JSON(404, helper.ResponseFormat(404, "article not found", nil))
+		// 	}
+		// 	return c.JSON(500, helper.ResponseFormat(500, "server error", nil))
+		// }
 
-		if article.UserID != uint(userID) {
-			return c.JSON(401, helper.ResponseFormat(401, "Unauthorized", nil))
-		}
+		// if  article.UserID != uint(userID) {
+		// 	return c.JSON(401, helper.ResponseFormat(401, "Unauthorized", nil))
+		// }
 
 		// fungsi delete article
-		err = ac.srv.DeleteArticles(uint(id));
-
+		err := ac.srv.DeleteArticles(uint(id), uint(userID));
 
 		if err != nil{
 			return c.JSON(500, helper.ResponseFormat(500, "server error", nil))
 		}
+
 		return c.JSON(200, helper.ResponseFormat(200, "success delete data", nil))
 	}
 }
