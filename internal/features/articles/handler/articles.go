@@ -35,9 +35,11 @@ func(ac *ArticlesController) CreateArticles() echo.HandlerFunc {
 		
 		var userID = utils.NewJwtUtility().DecodeToken(c.Get("user").(*jwt.Token));
 
-		if input.UserID != uint(userID){
-			return c.JSON(401, helper.ResponseFormat(400, "Unauthorized", nil))
-		}
+		// if input.UserID != uint(userID){
+		// 	return c.JSON(401, helper.ResponseFormat(400, "Unauthorized", nil))
+		// }
+
+		input.UserID = uint(userID)
 
 		err = ac.srv.CreateArticles(ToRequeteArticles(input));
 
