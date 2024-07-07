@@ -28,16 +28,15 @@ func NewUserService(q users.Query, v utils.AccountUtilityInterface, p utils.Pass
 
 func (us *userServices) Register(newData users.Users) error {
 
-	// err := us.vldt.Struct(&users.RegisterValidate{Email: newData.Email, Password: newData.Password, Name: newData.Name})
-
-	// if err != nil {
-	// 	log.Println("login validation error", err.Error())
-	// 	return errors.New("validasi tidak sesuai")
-	// }
+	err := us.vldt.RegisterValidator(newData.Name, newData.Email, newData.Password)
+	if err != nil {
+		log.Fatal("login validation error", err.Error())
+		return errors.New(err.Error())
+	}
 
 	processPw, err := us.pu.GeneratePassword(newData.Password)
 	if err != nil {
-		log.Println("register generate password error:", err.Error())
+		log.Fatal("register generate password error:", err.Error())
 		if err.Error() == bcrypt.ErrMismatchedHashAndPassword.Error() {
 			return errors.New("data tidak boleh kosong")
 		}
@@ -49,8 +48,6 @@ func (us *userServices) Register(newData users.Users) error {
 
 	if err != nil {
 		log.Println("register sql error:", err.Error())
-
-		// return errors.New(gorm.ErrInvalidData.Error())
 		return errors.New("terjadi kesalahan pada server saat mengolah data")
 	}
 	return nil
@@ -61,7 +58,7 @@ func (us *userServices) Login(email string, password string) (users.Users, strin
 	err := us.vldt.EmailPasswordValidator(email, password)
 	// Jika validasi gagal
 	if err != nil {
-		log.Println("validation error:", err.Error())
+		log.Fatal("validation error:", err.Error())
 		return users.Users{}, "", err
 	}
 
@@ -74,14 +71,14 @@ func (us *userServices) Login(email string, password string) (users.Users, strin
 	err = us.pu.CheckPassword([]byte(password), []byte(result.Password))
 
 	if err != nil {
-		// log.Fatal("Error On Password", err)
+		log.Fatal("Error On Password", err)
 		return users.Users{}, "", errors.New(bcrypt.ErrMismatchedHashAndPassword.Error())
 	}
 
 	token, err := us.jwt.GenerateJWT(result.ID, result.Email)
 	if err != nil {
-		log.Fatal("Error On Jwt", err)
-		return users.Users{}, "", err
+		log.Fatal("Error On Jwt ", err)
+		return users.Users{}, "", errors.New("Tidak dapat mendapatkan token")
 	}
 
 	return result, token, nil

@@ -12,22 +12,22 @@ import (
 
 func InitRoute(c *echo.Echo, ur users.Handler, ac articles.Handler) {
 
-	secrateJwt := configs.ImportSetting().JWTSECRET;
+	secrateJwt := configs.ImportSetting().JWTSECRET
 
-	c.POST("/users", ur.Register()) // register -> umum (boleh diakses semua orang)
+	c.POST("/register", ur.Register()) // register -> umum (boleh diakses semua orang)
 	c.POST("/login", ur.Login())
 
 	c.GET("/articles", ac.GetArticles())
 
-	a := c.Group("/articles");
+	a := c.Group("/articles")
 	a.Use(echojwt.WithConfig(
 		echojwt.Config{
-			SigningKey: []byte(secrateJwt),
+			SigningKey:    []byte(secrateJwt),
 			SigningMethod: jwt.SigningMethodHS256.Name,
 		},
 	))
 
-	a.POST("", ac.CreateArticles());
-	a.PUT("/:id", ac.UpdateArticles());
-	a.DELETE("/:id", ac.DeleteArticles());
+	a.POST("", ac.CreateArticles())
+	a.PUT("/:id", ac.UpdateArticles())
+	a.DELETE("/:id", ac.DeleteArticles())
 }

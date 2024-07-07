@@ -1,0 +1,450 @@
+openapi: 3.0.0
+info:
+  title: News Apps
+  description: |
+    Open API todo List
+  version: 1.0.0
+externalDocs:
+  description: Find out more about Swagger
+  url: http://swagger.io
+servers:
+- url: https://virtserver.swaggerhub.com/AnggiEkoPambudi/user_management/1.0.0
+  description: SwaggerHub API Auto Mocking
+- url: https://virtserver.swaggerhub.com/AKBARALISYIFA22/Todo/1.0.0
+  description: SwaggerHub API Auto Mocking
+- url: https://petstore.swagger.io/v2
+- url: localhost:8000/
+tags:
+- name: register
+  description: register
+- name: login
+  description: login user
+paths:
+  /register:
+    post:
+      tags:
+      - register
+      summary: register user
+      requestBody:
+        $ref: '#/components/requestBodies/register'
+      responses:
+        "201":
+          description: Success register
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+              example:
+                code: 201
+                message: success register
+        "400":
+          description: bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+              example:
+                code: 400
+                message: bad request
+        "500":
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+              example:
+                code: 500
+                message: server error
+  /login:
+    post:
+      tags:
+      - login
+      summary: login user
+      requestBody:
+        $ref: '#/components/requestBodies/login'
+      responses:
+        "201":
+          description: Success login
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+              example:
+                code: 200
+                massage: Loggin Success
+                token: zxR3423tr_Aqq
+                data:
+                  Id: 1
+                  name: anggi
+                  email: anggi@eko.com
+        "400":
+          description: bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+              example:
+                code: 400
+                message: bad request
+        "500":
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+              example:
+                code: 500
+                message: server error
+  /articles:
+    get:
+      summary: Get all article
+      responses:
+        "200":
+          description: Success get data Article
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_200'
+              example:
+                code: 200
+                message: Success
+                data:
+                - id: 1
+                  title: breakfast
+                  content: the content
+                  image: http://
+        "400":
+          description: Invalid Input
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+              example:
+                code: 400
+                message: invalid input
+        "500":
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+              example:
+                code: 500
+                message: server error
+    post:
+      summary: Add new article
+      requestBody:
+        $ref: '#/components/requestBodies/todo'
+      responses:
+        "201":
+          description: Success create Article
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+              example:
+                code: 201
+                message: success
+        "400":
+          description: bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+              example:
+                code: 400
+                message: bad request
+        "500":
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+              example:
+                code: 500
+                message: server error
+  /articles/{id}:
+    put:
+      summary: Update Article
+      parameters:
+      - name: id
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+      requestBody:
+        content:
+          aapplication/json:
+            schema:
+              $ref: '#/components/schemas/ApiResponse'
+            example:
+              code: 200
+              message: success
+              data:
+                id: 1
+                user_id: 1
+                title: breakfast
+                content: the content
+                image: http://
+      responses:
+        "200":
+          description: Success update Article
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+              example:
+                code: 200
+                message: success
+        "400":
+          description: bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+              example:
+                code: 400
+                message: bad request
+        "500":
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+              example:
+                code: 500
+                message: server error
+    delete:
+      summary: Delete Article
+      parameters:
+      - name: id
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+      responses:
+        "200":
+          description: Success delete Article
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+              example:
+                code: 200
+                message: success
+        "400":
+          description: bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+              example:
+                code: 400
+                message: bad request
+        "500":
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+              example:
+                code: 500
+                message: server error
+  /comment:
+    post:
+      summary: Add new comment
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/todo'
+            example:
+              comment: some_comment
+              article_id: 1
+      responses:
+        "201":
+          description: Success create comment
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+              example:
+                code: 201
+                message: success
+        "400":
+          description: bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+              example:
+                code: 400
+                message: bad request
+        "500":
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+              example:
+                code: 500
+                message: server error
+  /comment/{id}:
+    delete:
+      summary: Delete comment
+      parameters:
+      - name: id
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+      responses:
+        "200":
+          description: Success delete comment
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+              example:
+                code: 200
+                message: success
+        "400":
+          description: bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+              example:
+                code: 400
+                message: bad request
+        "500":
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+              example:
+                code: 500
+                message: server error
+components:
+  schemas:
+    register:
+      required:
+      - email
+      - password
+      - username
+      type: object
+      properties:
+        id:
+          type: integer
+        username:
+          type: string
+        email:
+          type: string
+        password:
+          type: string
+    login:
+      required:
+      - password
+      - username
+      type: object
+      properties:
+        id:
+          type: integer
+        username:
+          type: string
+        password:
+          type: string
+    todo:
+      required:
+      - description
+      - status
+      - title
+      type: object
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        description:
+          type: string
+        image:
+          type: string
+    ApiResponse:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        type:
+          type: string
+        message:
+          type: string
+    inline_response_200:
+      type: object
+      properties:
+        code:
+          type: integer
+        message:
+          type: string
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/todo'
+  responses:
+    "500":
+      description: Server Error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ApiResponse'
+          example:
+            code: 500
+            message: server error
+  requestBodies:
+    register:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/register'
+          example:
+            username: user1
+            email: user@gmail.com
+            password: user1
+    login:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/login'
+          example:
+            username: user1
+            password: user1
+    todo:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/todo'
+          example:
+            title: Sleep
+            content: the content
+            image: htttp://
+      required: true
+  securitySchemes:
+    petstore_auth:
+      type: oauth2
+      flows:
+        implicit:
+          authorizationUrl: http://petstore.swagger.io/oauth/dialog
+          scopes:
+            write:pets: modify pets in your account
+            read:pets: read your pets
+    api_key:
+      type: apiKey
+      name: api_key
+      in: header

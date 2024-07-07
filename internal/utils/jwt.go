@@ -36,7 +36,6 @@ func (j *jwtUtility) GenerateJWT(id uint, email string) (string, error) {
 	if err != nil {
 		return "", err
 	}
-
 	return result, nil
 }
 

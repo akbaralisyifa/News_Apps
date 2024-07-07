@@ -32,12 +32,12 @@ func InitUserRoute(db *gorm.DB) users.Handler {
 	return uc
 }
 
-func InitialArticleRouter(db *gorm.DB) articles.Handler{
-	am := repository.NewArticleModel(db);
-	as := services.NewArticlesServices(am);
-	ac := handler.NewArticlesController(as);
+func InitialArticleRouter(db *gorm.DB) articles.Handler {
+	am := repository.NewArticleModel(db)
+	as := services.NewArticlesServices(am)
+	ac := handler.NewArticlesController(as)
 
-	return ac;
+	return ac
 }
 
 func main() {
