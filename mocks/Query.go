@@ -13,6 +13,24 @@ type Query struct {
 	mock.Mock
 }
 
+// DeleteUserAccount provides a mock function with given fields: userID
+func (_m *Query) DeleteUserAccount(userID uint) error {
+	ret := _m.Called(userID)
+
+	if len(ret) == 0 {
+		panic("no return value specified for DeleteUserAccount")
+	}
+
+	var r0 error
+	if rf, ok := ret.Get(0).(func(uint) error); ok {
+		r0 = rf(userID)
+	} else {
+		r0 = ret.Error(0)
+	}
+
+	return r0
+}
+
 // Login provides a mock function with given fields: email
 func (_m *Query) Login(email string) (users.Users, error) {
 	ret := _m.Called(email)
@@ -47,6 +65,24 @@ func (_m *Query) Register(newUser users.Users) error {
 
 	if len(ret) == 0 {
 		panic("no return value specified for Register")
+	}
+
+	var r0 error
+	if rf, ok := ret.Get(0).(func(users.Users) error); ok {
+		r0 = rf(newUser)
+	} else {
+		r0 = ret.Error(0)
+	}
+
+	return r0
+}
+
+// UpdateUserAccount provides a mock function with given fields: newUser
+func (_m *Query) UpdateUserAccount(newUser users.Users) error {
+	ret := _m.Called(newUser)
+
+	if len(ret) == 0 {
+		panic("no return value specified for UpdateUserAccount")
 	}
 
 	var r0 error

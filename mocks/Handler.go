@@ -12,6 +12,26 @@ type Handler struct {
 	mock.Mock
 }
 
+// DeleteUserAccount provides a mock function with given fields:
+func (_m *Handler) DeleteUserAccount() echo.HandlerFunc {
+	ret := _m.Called()
+
+	if len(ret) == 0 {
+		panic("no return value specified for DeleteUserAccount")
+	}
+
+	var r0 echo.HandlerFunc
+	if rf, ok := ret.Get(0).(func() echo.HandlerFunc); ok {
+		r0 = rf()
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(echo.HandlerFunc)
+		}
+	}
+
+	return r0
+}
+
 // Login provides a mock function with given fields:
 func (_m *Handler) Login() echo.HandlerFunc {
 	ret := _m.Called()
@@ -38,6 +58,26 @@ func (_m *Handler) Register() echo.HandlerFunc {
 
 	if len(ret) == 0 {
 		panic("no return value specified for Register")
+	}
+
+	var r0 echo.HandlerFunc
+	if rf, ok := ret.Get(0).(func() echo.HandlerFunc); ok {
+		r0 = rf()
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(echo.HandlerFunc)
+		}
+	}
+
+	return r0
+}
+
+// UpdateUserAccount provides a mock function with given fields:
+func (_m *Handler) UpdateUserAccount() echo.HandlerFunc {
+	ret := _m.Called()
+
+	if len(ret) == 0 {
+		panic("no return value specified for UpdateUserAccount")
 	}
 
 	var r0 echo.HandlerFunc

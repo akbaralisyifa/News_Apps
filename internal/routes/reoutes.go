@@ -17,7 +17,19 @@ func InitRoute(c *echo.Echo, ur users.Handler, ac articles.Handler, cc comments.
 
 	c.POST("/register", ur.Register()) // register -> umum (boleh diakses semua orang)
 	c.POST("/login", ur.Login())
+	c.PUT("/users", ur.UpdateUserAccount(), echojwt.WithConfig(
+		echojwt.Config{
+			SigningKey:    []byte(secrateJwt),
+			SigningMethod: jwt.SigningMethodHS256.Name,
+		},
+	))
 
+	c.DELETE("/users", ur.DeleteUserAccount(), echojwt.WithConfig(
+		echojwt.Config{
+			SigningKey:    []byte(secrateJwt),
+			SigningMethod: jwt.SigningMethodHS256.Name,
+		},
+	))
 	c.GET("/articles", ac.GetArticles())
 	c.GET("/comments", cc.GetComments())
 
