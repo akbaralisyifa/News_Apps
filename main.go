@@ -7,8 +7,11 @@ import (
 	"newsapps/internal/features/articles/handler"
 	"newsapps/internal/features/articles/repository"
 	articleRepository "newsapps/internal/features/articles/repository"
-	"newsapps/internal/features/articles/services"
+	articleService "newsapps/internal/features/articles/services"
+	"newsapps/internal/features/comments"
+	"newsapps/internal/features/comments/commentHandler"
 	commentRepository "newsapps/internal/features/comments/repository"
+	"newsapps/internal/features/comments/services"
 	"newsapps/internal/features/users"
 	userHandler "newsapps/internal/features/users/handler"
 	userRepository "newsapps/internal/features/users/repository"
@@ -34,10 +37,18 @@ func InitUserRoute(db *gorm.DB) users.Handler {
 
 func InitialArticleRouter(db *gorm.DB) articles.Handler {
 	am := repository.NewArticleModel(db)
-	as := services.NewArticlesServices(am)
+	as := articleService.NewArticlesServices(am)
 	ac := handler.NewArticlesController(as)
 
 	return ac
+}
+
+func InitialCommentRouter(db *gorm.DB) comments.Handler {
+	cm := commentRepository.NewCommentModel(db)
+	cs := services.NewCommentServices(cm)
+	cc := commentHandler.NewCommentsController(cs)
+
+	return cc
 }
 
 func main() {
@@ -62,7 +73,8 @@ func main() {
 
 	ur := InitUserRoute(connection)
 	ac := InitialArticleRouter(connection)
+	cc := InitialCommentRouter(connection)
 
-	routes.InitRoute(e, ur, ac)
+	routes.InitRoute(e, ur, ac, cc)
 	e.Logger.Fatal(e.Start(":8000"))
 }
