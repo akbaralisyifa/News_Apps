@@ -57,15 +57,6 @@ func (am *ArticleModel) CreateArticles(newArticles articles.Article) error {
 // Update Aritcles
 func (am *ArticleModel) UpdateArticles(id uint, updateArticles articles.Article) error {
 	cnvData := ToArticlesQuery(updateArticles)
-	qry := am.db.Model(articles.Article{}).Where("id = ?", id).Updates(&cnvData)
-
-	if qry.Error != nil {
-		return qry.Error
-	}
-
-	if qry.RowsAffected < 1 {
-		return gorm.ErrRecordNotFound;
-	}
 
 	// Jika salah satu saja yang di update
 	if updateArticles.Title != "" {
@@ -80,17 +71,22 @@ func (am *ArticleModel) UpdateArticles(id uint, updateArticles articles.Article)
 		cnvData.Image = updateArticles.Image
 	}
 
-	err := am.db.Save(&cnvData).Error;
-	if err != nil {
-		return err;
+	qry := am.db.Model(Articles{}).Where("id = ?", id).Updates(&cnvData)
+
+	if qry.Error != nil {
+		return qry.Error
 	}
 
+	if qry.RowsAffected < 1 {
+		return gorm.ErrRecordNotFound;
+	}
+	
 	return nil;
 }
 
 // Delete Articles
-func (am *ArticleModel) DeleteArticles(id uint) error {
-	qry := am.db.Where("id = ?", id).Delete(Articles{});
+func (am *ArticleModel) DeleteArticles(id uint, userID uint) error {
+	qry := am.db.Where("id = ? AND user_id = ?", id, userID).Delete(articles.Article{})
 
 	if qry.Error != nil {
 		return qry.Error

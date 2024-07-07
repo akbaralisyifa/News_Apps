@@ -33,6 +33,7 @@ func InitRoute(c *echo.Echo, ur users.Handler, ac articles.Handler, cc comments.
 	a.PUT("/:id", ac.UpdateArticles())
 	a.DELETE("/:id", ac.DeleteArticles())
 
+
 	b := c.Group("/comments")
 	b.Use(echojwt.WithConfig(
 		echojwt.Config{
@@ -43,4 +44,7 @@ func InitRoute(c *echo.Echo, ur users.Handler, ac articles.Handler, cc comments.
 
 	b.POST("", cc.CreateComments())
 	b.DELETE("/:id", cc.DeleteComments())
+=======
+	a.GET("/:id", ac.GetArticlesByID())
+
 }
