@@ -56,10 +56,33 @@ func (am *ArticleModel) CreateArticles(newArticles articles.Article) error {
 
 // Update Aritcles
 func (am *ArticleModel) UpdateArticles(id uint, updateArticles articles.Article) error {
-	qry := am.db.Model(articles.Article{}).Where("id = ?", id).Updates(updateArticles)
+	cnvData := ToArticlesQuery(updateArticles)
+	qry := am.db.Model(articles.Article{}).Where("id = ?", id).Updates(&cnvData)
 
 	if qry.Error != nil {
 		return qry.Error
+	}
+
+	if qry.RowsAffected < 1 {
+		return gorm.ErrRecordNotFound;
+	}
+
+	// Jika salah satu saja yang di update
+	if updateArticles.Title != "" {
+		cnvData.Title = updateArticles.Title
+	}
+
+	if updateArticles.Content != "" {
+		cnvData.Content = updateArticles.Content
+	}
+
+	if updateArticles.Image != "" {
+		cnvData.Image = updateArticles.Image
+	}
+
+	err := am.db.Save(&cnvData).Error;
+	if err != nil {
+		return err;
 	}
 
 	return nil;

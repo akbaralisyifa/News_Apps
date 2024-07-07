@@ -32,3 +32,9 @@ type Query interface {
 	DeleteArticles(id uint) error
 	GetArticlesByID(id uint)(Article, error)
 }
+
+// initial validator
+type ARticlesValidate struct {
+	Title   string `validate:"required"`
+	Content string	`validate:"required"`
+}
