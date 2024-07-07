@@ -3,6 +3,7 @@ package routes
 import (
 	"newsapps/configs"
 	"newsapps/internal/features/articles"
+	"newsapps/internal/features/comments"
 	"newsapps/internal/features/users"
 
 	"github.com/golang-jwt/jwt"
@@ -10,7 +11,7 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-func InitRoute(c *echo.Echo, ur users.Handler, ac articles.Handler) {
+func InitRoute(c *echo.Echo, ur users.Handler, ac articles.Handler, cc comments.Handler) {
 
 	secrateJwt := configs.ImportSetting().JWTSECRET
 
@@ -18,6 +19,7 @@ func InitRoute(c *echo.Echo, ur users.Handler, ac articles.Handler) {
 	c.POST("/login", ur.Login())
 
 	c.GET("/articles", ac.GetArticles())
+	c.GET("/comments", cc.GetComments())
 
 	a := c.Group("/articles")
 	a.Use(echojwt.WithConfig(
@@ -30,4 +32,15 @@ func InitRoute(c *echo.Echo, ur users.Handler, ac articles.Handler) {
 	a.POST("", ac.CreateArticles())
 	a.PUT("/:id", ac.UpdateArticles())
 	a.DELETE("/:id", ac.DeleteArticles())
+
+	b := c.Group("/comments")
+	b.Use(echojwt.WithConfig(
+		echojwt.Config{
+			SigningKey:    []byte(secrateJwt),
+			SigningMethod: jwt.SigningMethodHS256.Name,
+		},
+	))
+
+	b.POST("", cc.CreateComments())
+	b.DELETE("/:id", cc.DeleteComments())
 }
