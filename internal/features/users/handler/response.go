@@ -3,9 +3,10 @@ package handler
 import "newsapps/internal/features/users"
 
 type LoginResponse struct {
-	ID    uint   `json:"id"`
-	Name  string `json:"name"`
-	Email string `json:"email"`
+	ID       uint   `json:"id"`
+	Name     string `json:"name"`
+	Password string `json:"-"`
+	Email    string `json:"email"`
 }
 
 func ToLoginReponse(input users.Users) LoginResponse {

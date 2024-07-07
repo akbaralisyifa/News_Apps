@@ -23,13 +23,13 @@ func (uc *UserController) Register() echo.HandlerFunc {
 		var input RegisterRequest
 		err := c.Bind(&input)
 		if err != nil {
-			return c.JSON(400, helper.ResponseFormat(400, "bad request", nil))
+			return c.JSON(http.StatusBadRequest, helper.ResponseFormat(http.StatusBadRequest, "bad request", nil))
 		}
 		err = uc.serv.Register(ToModelUsers(input))
 		if err != nil {
-			return c.JSON(500, helper.ResponseFormat(500, "server error", nil))
+			return c.JSON(http.StatusInternalServerError, helper.ResponseFormat(http.StatusInternalServerError, "server error", nil))
 		}
-		return c.JSON(201, helper.ResponseFormat(201, "success insert data", nil))
+		return c.JSON(http.StatusCreated, helper.ResponseFormat(http.StatusCreated, "success insert data", nil))
 	}
 }
 
@@ -38,15 +38,15 @@ func (uc *UserController) Login() echo.HandlerFunc {
 		var input LoginRequest
 		err := c.Bind(&input)
 		if err != nil {
-			return c.JSON(400, helper.ResponseFormat(400, "bad request", nil))
+			return c.JSON(http.StatusBadRequest, helper.ResponseFormat(http.StatusBadRequest, "bad request", nil))
 		}
 		result, token, err := uc.serv.Login(input.Email, input.Password)
 
 		if err != nil {
-			return c.JSON(500, helper.ResponseFormat(500, "server error", nil))
+			return c.JSON(http.StatusInternalServerError, helper.ResponseFormat(http.StatusInternalServerError, "server error", nil))
 		}
 
-		return c.JSON(http.StatusOK, map[string]any{"code": http.StatusOK, "message": "selama anda berhasil login", "data": ToLoginReponse(result), "token": token})
+		return c.JSON(http.StatusOK, map[string]any{"code": http.StatusOK, "message": "success", "data": ToLoginReponse(result), "token": token})
 
 	}
 }

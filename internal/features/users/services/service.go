@@ -28,12 +28,11 @@ func NewUserService(q users.Query, v utils.AccountUtilityInterface, p utils.Pass
 
 func (us *userServices) Register(newData users.Users) error {
 
-	// err := us.vldt.Struct(&users.RegisterValidate{Email: newData.Email, Password: newData.Password, Name: newData.Name})
-
-	// if err != nil {
-	// 	log.Println("login validation error", err.Error())
-	// 	return errors.New("validasi tidak sesuai")
-	// }
+	err := us.vldt.RegisterValidator(newData.Name, newData.Email, newData.Password)
+	if err != nil {
+		log.Println("login validation error", err.Error())
+		return errors.New(err.Error())
+	}
 
 	processPw, err := us.pu.GeneratePassword(newData.Password)
 	if err != nil {
@@ -49,8 +48,6 @@ func (us *userServices) Register(newData users.Users) error {
 
 	if err != nil {
 		log.Println("register sql error:", err.Error())
-
-		// return errors.New(gorm.ErrInvalidData.Error())
 		return errors.New("terjadi kesalahan pada server saat mengolah data")
 	}
 	return nil
@@ -80,8 +77,8 @@ func (us *userServices) Login(email string, password string) (users.Users, strin
 
 	token, err := us.jwt.GenerateJWT(result.ID, result.Email)
 	if err != nil {
-		log.Fatal("Error On Jwt", err)
-		return users.Users{}, "", err
+		// log.Fatal("Error On Jwt ", err)
+		return users.Users{}, "", errors.New("Tidak dapat mendapatkan token")
 	}
 
 	return result, token, nil
