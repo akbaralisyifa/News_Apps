@@ -30,13 +30,13 @@ func (us *userServices) Register(newData users.Users) error {
 
 	err := us.vldt.RegisterValidator(newData.Name, newData.Email, newData.Password)
 	if err != nil {
-		log.Println("login validation error", err.Error())
+		log.Fatal("login validation error", err.Error())
 		return errors.New(err.Error())
 	}
 
 	processPw, err := us.pu.GeneratePassword(newData.Password)
 	if err != nil {
-		log.Println("register generate password error:", err.Error())
+		log.Fatal("register generate password error:", err.Error())
 		if err.Error() == bcrypt.ErrMismatchedHashAndPassword.Error() {
 			return errors.New("data tidak boleh kosong")
 		}
@@ -58,7 +58,7 @@ func (us *userServices) Login(email string, password string) (users.Users, strin
 	err := us.vldt.EmailPasswordValidator(email, password)
 	// Jika validasi gagal
 	if err != nil {
-		log.Println("validation error:", err.Error())
+		log.Fatal("validation error:", err.Error())
 		return users.Users{}, "", err
 	}
 
@@ -71,13 +71,13 @@ func (us *userServices) Login(email string, password string) (users.Users, strin
 	err = us.pu.CheckPassword([]byte(password), []byte(result.Password))
 
 	if err != nil {
-		// log.Fatal("Error On Password", err)
+		log.Fatal("Error On Password", err)
 		return users.Users{}, "", errors.New(bcrypt.ErrMismatchedHashAndPassword.Error())
 	}
 
 	token, err := us.jwt.GenerateJWT(result.ID, result.Email)
 	if err != nil {
-		// log.Fatal("Error On Jwt ", err)
+		log.Fatal("Error On Jwt ", err)
 		return users.Users{}, "", errors.New("Tidak dapat mendapatkan token")
 	}
 
