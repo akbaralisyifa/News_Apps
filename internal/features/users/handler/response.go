@@ -5,7 +5,6 @@ import "newsapps/internal/features/users"
 type LoginResponse struct {
 	ID       uint   `json:"id"`
 	Name     string `json:"name"`
-	Password string `json:"-"`
 	Email    string `json:"email"`
 }
 
