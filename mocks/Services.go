@@ -13,6 +13,24 @@ type Services struct {
 	mock.Mock
 }
 
+// DeleteUserAccount provides a mock function with given fields: userID
+func (_m *Services) DeleteUserAccount(userID uint) error {
+	ret := _m.Called(userID)
+
+	if len(ret) == 0 {
+		panic("no return value specified for DeleteUserAccount")
+	}
+
+	var r0 error
+	if rf, ok := ret.Get(0).(func(uint) error); ok {
+		r0 = rf(userID)
+	} else {
+		r0 = ret.Error(0)
+	}
+
+	return r0
+}
+
 // Login provides a mock function with given fields: email, password
 func (_m *Services) Login(email string, password string) (users.Users, string, error) {
 	ret := _m.Called(email, password)
@@ -59,6 +77,24 @@ func (_m *Services) Register(newUser users.Users) error {
 	var r0 error
 	if rf, ok := ret.Get(0).(func(users.Users) error); ok {
 		r0 = rf(newUser)
+	} else {
+		r0 = ret.Error(0)
+	}
+
+	return r0
+}
+
+// UpdateUserAccount provides a mock function with given fields: newData
+func (_m *Services) UpdateUserAccount(newData users.Users) error {
+	ret := _m.Called(newData)
+
+	if len(ret) == 0 {
+		panic("no return value specified for UpdateUserAccount")
+	}
+
+	var r0 error
+	if rf, ok := ret.Get(0).(func(users.Users) error); ok {
+		r0 = rf(newData)
 	} else {
 		r0 = ret.Error(0)
 	}

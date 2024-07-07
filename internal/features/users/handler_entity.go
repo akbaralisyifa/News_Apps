@@ -14,16 +14,22 @@ type Users struct {
 type Handler interface {
 	Register() echo.HandlerFunc
 	Login() echo.HandlerFunc
+	UpdateUserAccount() echo.HandlerFunc
+	DeleteUserAccount() echo.HandlerFunc
 }
 
 type Services interface {
 	Register(newUser Users) error
 	Login(email string, password string) (Users, string, error)
+	UpdateUserAccount(newData Users) error
+	DeleteUserAccount(userID uint) error
 }
 
 type Query interface {
 	Register(newUser Users) error
 	Login(email string) (Users, error)
+	UpdateUserAccount(newUser Users) error
+	DeleteUserAccount(userID uint) error
 }
 
 type LoginValidate struct {
