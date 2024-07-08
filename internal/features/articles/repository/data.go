@@ -26,6 +26,16 @@ func (a *Articles) ToArticlesEntity() articles.Article {
 	}
 }
 
+func ToArticlesEntityGetAll(articlesList []Articles) []articles.Article{
+	articlesEntity := make([]articles.Article, len(articlesList));
+
+		for i, val := range articlesList{
+			articlesEntity[i] = val.ToArticlesEntityComments()
+		}
+
+	return articlesEntity;
+}
+
 func(a *Articles) ToArticlesEntityComments() articles.Article{
 	articlesEntity := a.ToArticlesEntity();
 

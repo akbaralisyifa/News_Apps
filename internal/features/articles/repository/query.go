@@ -19,15 +19,15 @@ func NewArticleModel(connection *gorm.DB) articles.Query {
 
 // Get All Articles
 func (am *ArticleModel) GetArticles() ([]articles.Article, error){
-	var result []articles.Article
-	qry := `SELECT * FROM "newsapps"."articles"`
-	err := am.db.Debug().Raw(qry).Scan(&result).Error;
+	var results []Articles;
+
+	err := am.db.Model(&Articles{}).Preload("Comments").Find(&results).Error
 
 	if err != nil {
 		return []articles.Article{}, err;
 	}
 
-	return result, nil
+	return ToArticlesEntityGetAll(results), nil
 }
 
 
