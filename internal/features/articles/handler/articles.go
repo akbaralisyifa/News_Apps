@@ -123,20 +123,6 @@ func(ac *ArticlesController) DeleteArticles() echo.HandlerFunc {
 		id, _ := strconv.Atoi(c.Param("id"))
 		var userID = utils.NewJwtUtility().DecodeToken(c.Get("user").(*jwt.Token));
 
-		// // get article by Id
-		// article, err := ac.srv.GetArticlesByID(uint(id));
-
-		// if err != nil {
-		// 	if err == gorm.ErrRecordNotFound {
-		// 		return c.JSON(404, helper.ResponseFormat(404, "article not found", nil))
-		// 	}
-		// 	return c.JSON(500, helper.ResponseFormat(500, "server error", nil))
-		// }
-
-		// if  article.UserID != uint(userID) {
-		// 	return c.JSON(401, helper.ResponseFormat(401, "Unauthorized", nil))
-		// }
-
 		// fungsi delete article
 		err := ac.srv.DeleteArticles(uint(id), uint(userID));
 
