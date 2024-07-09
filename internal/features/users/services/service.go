@@ -78,7 +78,7 @@ func (us *userServices) Login(email string, password string) (users.Users, strin
 	token, err := us.jwt.GenerateJWT(result.ID, result.Email)
 	if err != nil {
 		log.Println("Error On Jwt ", err)
-		return users.Users{}, "", errors.New("Tidak dapat mendapatkan token")
+		return users.Users{}, "", errors.New("tidak dapat mendapatkan token")
 	}
 
 	return result, token, nil
@@ -109,7 +109,7 @@ func (us *userServices) DeleteUserAccount(userID uint) error {
 
 	if err != nil {
 		log.Print("Delete account Sql Error", err.Error())
-		return errors.New("an error occurred on the server while processing data")
+		return errors.New(gorm.ErrInvalidData.Error())
 	}
 
 	return nil
