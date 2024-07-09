@@ -22,7 +22,31 @@ func (a *Articles) ToArticlesEntity() articles.Article {
 		Title:   a.Title,
 		Content: a.Content,
 		Image:   a.Image,
+		Comments: nil,
 	}
+}
+
+func ToArticlesEntityGetAll(articlesList []Articles) []articles.Article{
+	articlesEntity := make([]articles.Article, len(articlesList));
+
+		for i, val := range articlesList{
+			articlesEntity[i] = val.ToArticlesEntityComments()
+		}
+
+	return articlesEntity;
+}
+
+func(a *Articles) ToArticlesEntityComments() articles.Article{
+	articlesEntity := a.ToArticlesEntity();
+
+	if len(a.Comments) > 0 {
+		articlesEntity.Comments = make([]string, len(a.Comments));
+		for i, val := range a.Comments{
+			articlesEntity.Comments[i] = val.Comment
+		}
+	}
+
+	return articlesEntity;
 }
 
 func ToArticlesQuery(input articles.Article) Articles {

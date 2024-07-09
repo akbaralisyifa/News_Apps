@@ -8,6 +8,7 @@ type ArticlesResponse struct {
 	Title   string `json:"title"`
 	Content string `json:"content"`
 	Image   string `json:"image"`
+	Comments []string `json:"comments"`
 }
 
 func ToArticlesResponse(input []articles.Article) []ArticlesResponse {
@@ -20,6 +21,7 @@ func ToArticlesResponse(input []articles.Article) []ArticlesResponse {
 			Title: val.Title,
 			Content: val.Content,
 			Image: val.Image,
+			Comments: val.Comments,
 		})
 	}
 
@@ -34,5 +36,6 @@ func ToArticlesResponseById(input articles.Article) ArticlesResponse {
 		Title: input.Title,
 		Content: input.Content,
 		Image: input.Image,
+		Comments: input.Comments,
 	}
 }

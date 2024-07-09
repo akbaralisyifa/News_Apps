@@ -8,6 +8,7 @@ type Article struct {
 	Title   string
 	Content string
 	Image   string
+	Comments []string
 }
 
 type Handler interface {

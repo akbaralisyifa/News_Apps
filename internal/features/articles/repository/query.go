@@ -1,6 +1,7 @@
 package repository
 
 import (
+	"fmt"
 	"newsapps/internal/features/articles"
 
 	"gorm.io/gorm"
@@ -18,29 +19,36 @@ func NewArticleModel(connection *gorm.DB) articles.Query {
 
 // Get All Articles
 func (am *ArticleModel) GetArticles() ([]articles.Article, error){
-	var result []articles.Article
+	var results []Articles;
 
-	err := am.db.Find(&result).Error;
+	err := am.db.Model(&Articles{}).Preload("Comments").Find(&results).Error
 
 	if err != nil {
 		return []articles.Article{}, err;
 	}
 
-	return result, nil
+	return ToArticlesEntityGetAll(results), nil
 }
 
+
+
 // Get Article by ID
-func (am *ArticleModel) GetArticlesByID(id uint)(articles.Article, error){
+func (am *ArticleModel) GetArticlesByID(id uint) (articles.Article, error) {
 	var result Articles;
 
-	err := am.db.First(&result, id).Error;
-
+	// Muat artikel beserta komentarnya
+	err := am.db.Preload("Comments").First(&result, id).Error
 	if err != nil {
+		if err == gorm.ErrRecordNotFound {
+			return articles.Article{}, fmt.Errorf("article with ID %d not found", id)
+		}
 		return articles.Article{}, err
 	}
 
-	return result.ToArticlesEntity(), nil
+		return result.ToArticlesEntityComments(), nil
 }
+
+
 
 // Create Articles
 func (am *ArticleModel) CreateArticles(newArticles articles.Article) error {
@@ -86,7 +94,7 @@ func (am *ArticleModel) UpdateArticles(id uint, updateArticles articles.Article)
 
 // Delete Articles
 func (am *ArticleModel) DeleteArticles(id uint, userID uint) error {
-	qry := am.db.Where("id = ? AND user_id = ?", id, userID).Delete(articles.Article{})
+	qry := am.db.Where("id = ? AND user_id = ?", id, userID).Delete(&Articles{})
 
 	if qry.Error != nil {
 		return qry.Error
