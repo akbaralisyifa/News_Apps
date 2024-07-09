@@ -9,76 +9,76 @@ import (
 )
 
 type ArticlesServices struct {
-	qry 	 articles.Query
+	qry      articles.Query
 	validate *validator.Validate
 }
 
-func NewArticlesServices( q articles.Query) articles.Services {
+func NewArticlesServices(q articles.Query) articles.Services {
 	return &ArticlesServices{
-		qry: q,
-		validate : validator.New(),
+		qry:      q,
+		validate: validator.New(),
 	}
 }
 
-func (as *ArticlesServices) CreateArticles(newArticles articles.Article) error{
+func (as *ArticlesServices) CreateArticles(newArticles articles.Article) error {
 	// validate articles
-	err:= as.validate.Struct(
+	err := as.validate.Struct(
 		&articles.ARticlesValidate{
-			Title: newArticles.Title, 
+			Title:   newArticles.Title,
 			Content: newArticles.Content,
-		});
+		})
 
 	if err != nil {
 		return errors.New("validate is not empty")
 	}
 
 	// query articles
-	err = as.qry.CreateArticles(newArticles);
+	err = as.qry.CreateArticles(newArticles)
 
 	if err != nil {
 		log.Print("Create Articles Sql Error", err.Error())
 		return errors.New("an error occurred on the server while processing data")
 	}
 
-	return nil;
+	return nil
 }
 
-func(as *ArticlesServices) GetArticles()( []articles.Article, error){
-	result, err := as.qry.GetArticles();
+func (as *ArticlesServices) GetArticles() ([]articles.Article, error) {
+	result, err := as.qry.GetArticles()
 
 	if err != nil {
 		log.Print("Get Articles Sql Error", err.Error())
 		return []articles.Article{}, errors.New("an error occurred on the server while processing data")
 	}
-	return result, nil;
+	return result, nil
 }
 
-func(as *ArticlesServices) GetArticlesByID(id uint)(articles.Article, error){
-	result, err := as.qry.GetArticlesByID(id);
+func (as *ArticlesServices) GetArticlesByID(id uint) (articles.Article, error) {
+	result, err := as.qry.GetArticlesByID(id)
 
 	if err != nil {
 		log.Print("Get Article By ID Sql Error", err.Error())
 		return articles.Article{}, errors.New("an error occurred on the server while processing data")
 	}
 
-	return result, nil;
+	return result, nil
 
 }
 
-func(as *ArticlesServices) UpdateArticles(id uint, updateArticles articles.Article) error {
+func (as *ArticlesServices) UpdateArticles(id uint, updateArticles articles.Article) error {
 
-	err := as.qry.UpdateArticles(id, updateArticles);
+	err := as.qry.UpdateArticles(id, updateArticles)
 
 	if err != nil {
 		log.Print("Update Articles Sql Error", err.Error())
 		return errors.New("an error occurred on the server while processing data")
 	}
 
-	return nil;
+	return nil
 }
 
-func(as *ArticlesServices) DeleteArticles(id uint, userID uint) error{
-	err := as.qry.DeleteArticles(id, userID);
+func (as *ArticlesServices) DeleteArticles(id uint, userID uint) error {
+	err := as.qry.DeleteArticles(id, userID)
 
 	if err != nil {
 		log.Print("Delete Articles Sql Error", err.Error())
@@ -87,4 +87,3 @@ func(as *ArticlesServices) DeleteArticles(id uint, userID uint) error{
 
 	return nil
 }
-

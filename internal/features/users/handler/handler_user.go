@@ -43,13 +43,13 @@ func (uc *UserController) Login() echo.HandlerFunc {
 		var input LoginRequest
 		err := c.Bind(&input)
 		if err != nil {
-			log.Fatal("Error", err.Error())
+			log.Println("Error", err.Error())
 			return c.JSON(http.StatusBadRequest, helper.ResponseFormat(http.StatusBadRequest, "bad request", nil))
 		}
 		result, token, err := uc.srv.Login(input.Email, input.Password)
 
 		if err != nil {
-			log.Fatal("Error", err.Error())
+			log.Println("Error", err.Error())
 			return c.JSON(http.StatusInternalServerError, helper.ResponseFormat(http.StatusInternalServerError, "server error", nil))
 		}
 
