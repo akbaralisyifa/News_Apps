@@ -179,3 +179,93 @@ func TestLogin(t *testing.T) {
 		assert.ErrorContains(t, err, "Tidak dapat mendapatkan token")
 	})
 }
+
+func TestUpdateUserAccount(t *testing.T) {
+	qry := mocks.NewQuery(t)
+	pu := mocks.NewPasswordUtilityInterface(t)
+	jwt := mocks.NewJwtUtilityInterface(t)
+	vldt := mocks.NewAccountUtilityInterface(t)
+	srv := services.NewUserService(qry, vldt, pu, jwt)
+
+	input := users.Users{Name: "anggieko", Password: "anggi12345", Email: "anggi@eko.com"}
+
+	t.Run("Success Update User Data", func(t *testing.T) {
+		inputQry := users.Users{Name: "anggieko", Password: "somepassword", Email: "anggi@eko.com"}
+
+		pu.On("GeneratePassword", input.Password).Return([]byte("somepassword"), nil).Once()
+		qry.On("UpdateUserAccount", inputQry).Return(nil).Once()
+
+		err := srv.UpdateUserAccount(input)
+
+		pu.AssertExpectations(t)
+		qry.AssertExpectations(t)
+
+		assert.Nil(t, err)
+		// assert.Equal(t, "anggi12345", input.Password)
+
+	})
+
+	t.Run("Error Hash Password", func(t *testing.T) {
+		originalPassword := input.Password
+		pu.On("GeneratePassword", input.Password).Return(nil, bcrypt.ErrPasswordTooLong).Once()
+
+		err := srv.UpdateUserAccount(input)
+
+		pu.AssertExpectations(t)
+
+		assert.Error(t, err)
+		assert.ErrorContains(t, err, bcrypt.ErrPasswordTooLong.Error())
+		assert.Equal(t, originalPassword, input.Password) // memastikan password tetap sama
+
+	})
+
+	t.Run("Error From Query", func(t *testing.T) {
+		inputQry := users.Users{Name: "anggieko", Password: "goodpassword", Email: "anggi@eko.com"}
+		pu.On("GeneratePassword", input.Password).Return([]byte("goodpassword"), nil).Once()
+		qry.On("UpdateUserAccount", inputQry).Return(gorm.ErrInvalidData).Once()
+
+		err := srv.UpdateUserAccount(input)
+
+		pu.AssertExpectations(t)
+		qry.AssertExpectations(t)
+
+		assert.Error(t, err)
+		assert.ErrorContains(t, err, "terjadi kesalahan pada server saat mengolah data")
+
+	})
+}
+
+func TestDeleteUserAccount(t *testing.T) {
+	qry := mocks.NewQuery(t)
+	pu := mocks.NewPasswordUtilityInterface(t)
+	jwt := mocks.NewJwtUtilityInterface(t)
+	vldt := mocks.NewAccountUtilityInterface(t)
+	srv := services.NewUserService(qry, vldt, pu, jwt)
+
+	var userID uint = 1
+
+	t.Run("Success Update User Data", func(t *testing.T) {
+
+		qry.On("DeleteUserAccount", userID).Return(nil).Once()
+
+		err := srv.DeleteUserAccount(userID)
+
+		qry.AssertExpectations(t)
+
+		assert.Nil(t, err)
+
+	})
+
+	t.Run("Error From Query", func(t *testing.T) {
+
+		qry.On("DeleteUserAccount", userID).Return(gorm.ErrInvalidData).Once()
+
+		err := srv.DeleteUserAccount(userID)
+
+		qry.AssertExpectations(t)
+
+		assert.Error(t, err)
+		assert.ErrorContains(t, err, string(gorm.ErrInvalidData.Error()))
+
+	})
+}

@@ -9,7 +9,7 @@ import (
 
 type ArticleModel struct {
 	db *gorm.DB
-};
+}
 
 func NewArticleModel(connection *gorm.DB) articles.Query {
 	return &ArticleModel{
@@ -18,23 +18,24 @@ func NewArticleModel(connection *gorm.DB) articles.Query {
 }
 
 // Get All Articles
-func (am *ArticleModel) GetArticles() ([]articles.Article, error){
-	var results []Articles;
+func (am *ArticleModel) GetArticles() ([]articles.Article, error) {
+	var results []Articles
 
-	err := am.db.Model(&Articles{}).Preload("Comments").Find(&results).Error
+	err := am.db.Debug().Model(&Articles{}).Preload("Comments").Find(&results).Error
 
 	if err != nil {
-		return []articles.Article{}, err;
+		return []articles.Article{}, err
 	}
 
+	for i, v := range results {
+		fmt.Println("data", i, v)
+	}
 	return ToArticlesEntityGetAll(results), nil
 }
 
-
-
 // Get Article by ID
 func (am *ArticleModel) GetArticlesByID(id uint) (articles.Article, error) {
-	var result Articles;
+	var result Articles
 
 	// Muat artikel beserta komentarnya
 	err := am.db.Preload("Comments").First(&result, id).Error
@@ -45,21 +46,19 @@ func (am *ArticleModel) GetArticlesByID(id uint) (articles.Article, error) {
 		return articles.Article{}, err
 	}
 
-		return result.ToArticlesEntityComments(), nil
+	return result.ToArticlesEntityComments(), nil
 }
-
-
 
 // Create Articles
 func (am *ArticleModel) CreateArticles(newArticles articles.Article) error {
 	resultData := ToArticlesQuery(newArticles)
-	err := am.db.Create(&resultData).Error;
+	err := am.db.Create(&resultData).Error
 
 	if err != nil {
-		return err;
+		return err
 	}
 
-	return nil;
+	return nil
 }
 
 // Update Aritcles
@@ -86,10 +85,10 @@ func (am *ArticleModel) UpdateArticles(id uint, updateArticles articles.Article)
 	}
 
 	if qry.RowsAffected < 1 {
-		return gorm.ErrRecordNotFound;
+		return gorm.ErrRecordNotFound
 	}
-	
-	return nil;
+
+	return nil
 }
 
 // Delete Articles
@@ -104,5 +103,5 @@ func (am *ArticleModel) DeleteArticles(id uint, userID uint) error {
 		return gorm.ErrRecordNotFound
 	}
 
-	return nil;
+	return nil
 }
