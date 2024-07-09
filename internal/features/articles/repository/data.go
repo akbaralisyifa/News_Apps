@@ -16,37 +16,42 @@ type Articles struct {
 	Comments []repository.Comments `gorm:"foreignKey:article_id"`
 }
 
+type Comments struct {
+	UserID  uint
+	Comment string
+}
+
 func (a *Articles) ToArticlesEntity() articles.Article {
 	return articles.Article{
-		ID:      a.ID,
-		Title:   a.Title,
-		Content: a.Content,
-		Image:   a.Image,
+		ID:       a.ID,
+		Title:    a.Title,
+		Content:  a.Content,
+		Image:    a.Image,
 		Comments: nil,
 	}
 }
 
-func ToArticlesEntityGetAll(articlesList []Articles) []articles.Article{
-	articlesEntity := make([]articles.Article, len(articlesList));
+func ToArticlesEntityGetAll(articlesList []Articles) []articles.Article {
+	articlesEntity := make([]articles.Article, len(articlesList))
 
-		for i, val := range articlesList{
-			articlesEntity[i] = val.ToArticlesEntityComments()
-		}
+	for i, val := range articlesList {
+		articlesEntity[i] = val.ToArticlesEntityComments()
+	}
 
-	return articlesEntity;
+	return articlesEntity
 }
 
-func(a *Articles) ToArticlesEntityComments() articles.Article{
-	articlesEntity := a.ToArticlesEntity();
+func (a *Articles) ToArticlesEntityComments() articles.Article {
+	articlesEntity := a.ToArticlesEntity()
 
 	if len(a.Comments) > 0 {
-		articlesEntity.Comments = make([]string, len(a.Comments));
-		for i, val := range a.Comments{
+		articlesEntity.Comments = make([]string, len(a.Comments))
+		for i, val := range a.Comments {
 			articlesEntity.Comments[i] = val.Comment
 		}
 	}
 
-	return articlesEntity;
+	return articlesEntity
 }
 
 func ToArticlesQuery(input articles.Article) Articles {
