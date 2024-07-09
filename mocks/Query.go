@@ -3,6 +3,7 @@
 package mocks
 
 import (
+	"newsapps/internal/features/articles"
 	users "newsapps/internal/features/users"
 
 	mock "github.com/stretchr/testify/mock"
@@ -107,4 +108,30 @@ func NewQuery(t interface {
 	t.Cleanup(func() { mock.AssertExpectations(t) })
 
 	return mock
+}
+
+// bagian query article
+func (m *Query) CreateArticles(article articles.Article) error {
+    args := m.Called(article)
+    return args.Error(0)
+}
+
+func (m *Query) GetArticles() ([]articles.Article, error) {
+    args := m.Called()
+    return args.Get(0).([]articles.Article), args.Error(1)
+}
+
+func (m *Query) GetArticlesByID(id uint) (articles.Article, error) {
+    args := m.Called(id)
+    return args.Get(0).(articles.Article), args.Error(1)
+}
+
+func (m *Query) UpdateArticles(id uint, article articles.Article) error {
+    args := m.Called(id, article)
+    return args.Error(0)
+}
+
+func (m *Query) DeleteArticles(id uint, userID uint) error {
+    args := m.Called(id, userID)
+    return args.Error(0)
 }
