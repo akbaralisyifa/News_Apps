@@ -85,12 +85,6 @@ func (us *userServices) Login(email string, password string) (users.Users, strin
 }
 
 func (us *userServices) UpdateUserAccount(newData users.Users) error {
-
-	// err := us.vldt.RegisterValidator(newData.Name, newData.Email, newData.Password)
-	// if err != nil {
-	// 	log.Println("login validation error", err.Error())
-	// 	return errors.New(err.Error())
-	// }
 	var err error
 	if newData.Password != "" {
 		processPw, err := us.pu.GeneratePassword(newData.Password)
@@ -114,7 +108,7 @@ func (us *userServices) DeleteUserAccount(userID uint) error {
 	err := us.qry.DeleteUserAccount(userID)
 
 	if err != nil {
-		log.Print("Delete Articles Sql Error", err.Error())
+		log.Print("Delete account Sql Error", err.Error())
 		return errors.New("an error occurred on the server while processing data")
 	}
 

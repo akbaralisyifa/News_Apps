@@ -26,12 +26,12 @@ func (uc *UserController) Register() echo.HandlerFunc {
 		var input UserRequest
 		err := c.Bind(&input)
 		if err != nil {
-			log.Fatal("Error", err.Error())
+			log.Println("Error", err.Error())
 			return c.JSON(http.StatusBadRequest, helper.ResponseFormat(http.StatusBadRequest, "bad request", nil))
 		}
 		err = uc.srv.Register(ToModelUsers(input))
 		if err != nil {
-			log.Fatal("Error", err.Error())
+			log.Println("Error", err.Error())
 			return c.JSON(http.StatusInternalServerError, helper.ResponseFormat(http.StatusInternalServerError, "server error", nil))
 		}
 		return c.JSON(http.StatusCreated, helper.ResponseFormat(http.StatusCreated, "success insert data", nil))
