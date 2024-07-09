@@ -3,6 +3,7 @@ package utils
 import (
 	"errors"
 	"log"
+	"newsapps/internal/features/articles"
 	"newsapps/internal/features/users"
 
 	"github.com/go-playground/validator/v10"
@@ -11,6 +12,7 @@ import (
 type AccountUtilityInterface interface {
 	EmailPasswordValidator(inputEmail string, inputPw string) error
 	RegisterValidator(inputName string, inputEmail string, inputPw string) error
+	CreateArticlesValidator(title string, content string) error 
 }
 
 type accountUtility struct {
@@ -39,4 +41,14 @@ func (au *accountUtility) RegisterValidator(inputName string, inputEmail string,
 		return errors.New("validasi gagal")
 	}
 	return nil
+}
+
+func (au *accountUtility) CreateArticlesValidator(title string, content string) error {
+	err := au.vldt.Struct(&articles.ArticlesValidate{Title: title, Content: content});
+	if err != nil {
+		log.Println("validation error: ", err.Error());
+		return errors.New("validation failed")
+	};
+
+	return nil;
 }

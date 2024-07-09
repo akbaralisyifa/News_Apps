@@ -4,34 +4,28 @@ import (
 	"errors"
 	"log"
 	"newsapps/internal/features/articles"
-
-	"github.com/go-playground/validator/v10"
+	"newsapps/internal/utils"
 )
 
 type ArticlesServices struct {
 	qry 	 articles.Query
-	validate *validator.Validate
+	vldt	utils.AccountUtilityInterface
 }
 
-func NewArticlesServices( q articles.Query) articles.Services {
+func NewArticlesServices( q articles.Query, v utils.AccountUtilityInterface) articles.Services {
 	return &ArticlesServices{
 		qry: q,
-		validate : validator.New(),
+		vldt: v,
 	}
 }
 
 func (as *ArticlesServices) CreateArticles(newArticles articles.Article) error{
 	// validate articles
-	err:= as.validate.Struct(
-		&articles.ARticlesValidate{
-			Title: newArticles.Title, 
-			Content: newArticles.Content,
-		});
+	err:= as.vldt.CreateArticlesValidator(newArticles.Title, newArticles.Content)
 
 	if err != nil {
 		return errors.New("validate is not empty")
 	}
-
 	// query articles
 	err = as.qry.CreateArticles(newArticles);
 

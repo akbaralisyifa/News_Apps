@@ -36,7 +36,7 @@ type Query interface {
 }
 
 // initial validator
-type ARticlesValidate struct {
+type ArticlesValidate struct {
 	Title   string `validate:"required"`
 	Content string	`validate:"required"`
 }

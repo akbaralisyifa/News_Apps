@@ -36,8 +36,9 @@ func InitUserRoute(db *gorm.DB) users.Handler {
 }
 
 func InitialArticleRouter(db *gorm.DB) articles.Handler {
+	vldt := utils.NewAccountUtility(*validator.New())
 	am := repository.NewArticleModel(db)
-	as := articleService.NewArticlesServices(am)
+	as := articleService.NewArticlesServices(am, vldt)
 	ac := handler.NewArticlesController(as)
 
 	return ac

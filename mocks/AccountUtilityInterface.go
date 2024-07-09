@@ -9,6 +9,24 @@ type AccountUtilityInterface struct {
 	mock.Mock
 }
 
+// CreateArticlesValidator provides a mock function with given fields: title, content
+func (_m *AccountUtilityInterface) CreateArticlesValidator(title string, content string) error {
+	ret := _m.Called(title, content)
+
+	if len(ret) == 0 {
+		panic("no return value specified for CreateArticlesValidator")
+	}
+
+	var r0 error
+	if rf, ok := ret.Get(0).(func(string, string) error); ok {
+		r0 = rf(title, content)
+	} else {
+		r0 = ret.Error(0)
+	}
+
+	return r0
+}
+
 // EmailPasswordValidator provides a mock function with given fields: inputEmail, inputPw
 func (_m *AccountUtilityInterface) EmailPasswordValidator(inputEmail string, inputPw string) error {
 	ret := _m.Called(inputEmail, inputPw)
