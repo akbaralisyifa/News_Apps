@@ -5,12 +5,12 @@ import (
 )
 
 type ArticlesResponse struct {
-	ID       uint   `json:"id"`
-	UserID   uint   `json:"user_id"`
-	Title    string `json:"title"`
-	Content  string `json:"content"`
-	Image    string `json:"image"`
-	Comments []string
+	ID       uint     `json:"id"`
+	UserID   uint     `json:"user_id"`
+	Title    string   `json:"title"`
+	Content  string   `json:"content"`
+	Image    string   `json:"image"`
+	Comments []string `json:"comments"`
 }
 
 func ToArticlesResponse(input []articles.Article) []ArticlesResponse {
