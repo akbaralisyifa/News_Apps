@@ -1,8 +1,6 @@
 package repository
 
 import (
-	"encoding/json"
-	"log"
 	"newsapps/internal/features/articles"
 	"newsapps/internal/features/comments/repository"
 
@@ -21,15 +19,6 @@ type Articles struct {
 type Comments struct {
 	UserID  uint
 	Comment string
-}
-
-type ArticlesAndComments struct {
-	ArticleID uint
-	Title     string
-	Content   string
-	Image     string
-	Comments  []repository.Comments
-	UserID    []repository.Comments
 }
 
 func (a *Articles) ToArticlesEntity() articles.Article {
@@ -59,27 +48,6 @@ func (a *Articles) ToArticlesEntityComments() articles.Article {
 		articlesEntity.Comments = make([]string, len(a.Comments))
 		for i, val := range a.Comments {
 			articlesEntity.Comments[i] = val.Comment
-		}
-	}
-
-	return articlesEntity
-}
-
-func (a *Articles) ToArticlesUserIdAndComments() articles.Article {
-	articlesEntity := a.ToArticlesEntity()
-
-	if len(a.Comments) > 0 {
-		articlesEntity.Comments = make([]string, len(a.Comments))
-		for i, val := range a.Comments {
-			// dataComent := fmt.Sprintf(`["user_id" :%d ,"comments":%s]`, val.UserID, val.Comment)
-			dataComent := Comments{val.UserID, val.Comment}
-			var jsonData, err = json.Marshal(dataComent)
-			if err != nil {
-				log.Println(err.Error())
-				return articles.Article{}
-			}
-
-			articlesEntity.Comments[i] = string(jsonData)
 		}
 	}
 
