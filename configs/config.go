@@ -2,6 +2,7 @@ package configs
 
 import (
 	"fmt"
+	"log"
 	"os"
 
 	"github.com/joho/godotenv"
@@ -39,11 +40,12 @@ func ConnectDB(s setting) (*gorm.DB, error) {
 	var connStr = fmt.Sprintf("host=%s user=%s password=%s port=%s dbname=%s", s.Host, s.User, s.Password, s.Port, s.DBNAME)
 	db, err := gorm.Open(postgres.Open(connStr), &gorm.Config{
 		NamingStrategy: schema.NamingStrategy{
-			TablePrefix: "be23.",
+			TablePrefix: "newsapps.",
 		},
 	})
 
 	if err != nil {
+		log.Fatal("Error config database ", err.Error())
 		return nil, err
 	}
 
