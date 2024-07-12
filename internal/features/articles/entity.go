@@ -8,7 +8,12 @@ type Article struct {
 	Title    string
 	Content  string
 	Image    string
-	Comments []string
+	Comments []Comment
+}
+
+type Comment struct {
+	UserID  uint
+	Comment string
 }
 
 type Handler interface {

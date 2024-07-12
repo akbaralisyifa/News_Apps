@@ -45,9 +45,12 @@ func (a *Articles) ToArticlesEntityComments() articles.Article {
 	articlesEntity := a.ToArticlesEntity()
 
 	if len(a.Comments) > 0 {
-		articlesEntity.Comments = make([]string, len(a.Comments))
+		articlesEntity.Comments = make([]articles.Comment, len(a.Comments))
 		for i, val := range a.Comments {
-			articlesEntity.Comments[i] = val.Comment
+			articlesEntity.Comments[i] = articles.Comment{
+				UserID:  val.UserID,
+				Comment: val.Comment,
+			}
 		}
 	}
 
