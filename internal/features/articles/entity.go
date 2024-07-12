@@ -3,11 +3,11 @@ package articles
 import "github.com/labstack/echo/v4"
 
 type Article struct {
-	ID      uint
-	UserID  uint
-	Title   string
-	Content string
-	Image   string
+	ID       uint
+	UserID   uint
+	Title    string
+	Content  string
+	Image    string
 	Comments []string
 }
 
@@ -17,6 +17,7 @@ type Handler interface {
 	UpdateArticles() echo.HandlerFunc
 	DeleteArticles() echo.HandlerFunc
 	GetArticlesByID() echo.HandlerFunc
+	UploadImage() echo.HandlerFunc
 }
 
 type Services interface {
@@ -24,7 +25,7 @@ type Services interface {
 	GetArticles() ([]Article, error)
 	UpdateArticles(id uint, updateArticles Article) error
 	DeleteArticles(id uint, userID uint) error
-	GetArticlesByID(id uint)(Article, error)
+	GetArticlesByID(id uint) (Article, error)
 }
 
 type Query interface {
@@ -32,11 +33,11 @@ type Query interface {
 	CreateArticles(newArticles Article) error
 	UpdateArticles(id uint, updateArticles Article) error
 	DeleteArticles(id uint, userID uint) error
-	GetArticlesByID(id uint)(Article, error)
+	GetArticlesByID(id uint) (Article, error)
 }
 
 // initial validator
 type ArticlesValidate struct {
 	Title   string `validate:"required"`
-	Content string	`validate:"required"`
+	Content string `validate:"required"`
 }

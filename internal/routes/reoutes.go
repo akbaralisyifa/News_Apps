@@ -33,6 +33,8 @@ func InitRoute(c *echo.Echo, ur users.Handler, ac articles.Handler, cc comments.
 	c.GET("/articles", ac.GetArticles())
 	c.GET("/comments", cc.GetComments())
 
+	c.POST("/uploads", ac.UploadImage())
+
 	a := c.Group("/articles")
 	a.Use(echojwt.WithConfig(
 		echojwt.Config{
